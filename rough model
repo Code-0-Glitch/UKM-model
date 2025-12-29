@@ -1,0 +1,73 @@
+from itertools import count
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+print("enter the parameters mentioned below: ")
+print();
+C_in = input("the initial concentration of urea in a patient is: ");
+# usually 59–164 mg/dL you can multiply this by using factor 2.14 to get the actual urea concentration
+C_in = float(C_in) * 2.14;
+# input the time for which you can do the dialysis
+time = input("input the time of dialysis (in hours): ");
+# sampling intervals
+sampling = input("input interval with which you want to take measurement(integer) (in minutes): ")
+sampling = int(sampling) * 1;
+time = int(time) * 60;
+# print(C_in, time);
+# there is some exponential decay in the effectiveness of removing the
+# so the new concentration is updated according to exponential value decreament
+# let C_t be the new concentration
+
+C_t = []
+add_to_C_t = 0.00;
+# we need the exponent to vary according to the random function
+Random_Var = [];
+add_to_Random_Var = None
+# need a seed for the random number
+rng = np.random.default_rng();
+#variable that can store the sampling time
+Sampling_time = []
+# now fill it using loop
+for i in range(0, time, sampling):
+  Sampling_time.append(i);
+time_series = np.array(Sampling_time)
+# print(np.size(time_series))
+
+# using loop to fill the array
+# using the exponential decay (hence the negative sign) to indicate the loss of urea in the blood compartment
+
+for i in range(0, np.size(time_series), 1):
+  add_to_Random_Var = rng.uniform(-0.099, 0.099)
+  Random_Var.append(add_to_Random_Var);
+  if (i == 0):
+    add_to_C_t = float(C_in) * np.exp(-(0.11256 + Random_Var[i])) ;
+    C_t.append(add_to_C_t);
+  else:
+    add_to_C_t = float(C_t[i-1]) * np.exp(-(0.11256 + Random_Var[i])) ;
+    C_t.append(add_to_C_t);
+
+# print(C_t, Random_Var);
+
+# CONVERT TO THE TABLE OF DataFrame
+data = {'time': time_series, 'Urea_Concentration': C_t}
+
+# final data for the plot
+
+model = pd.DataFrame(data);
+print(pd.DataFrame(model))
+
+model.plot(x='time', y='Urea_Concentration', kind= 'line' )
+plt.xlabel = "time";
+plt.ylabel = "Urea concentration";
+plt.show();
+
+
+# STEPS REMAINING
+
+# now the decay in the concentration can be plotted for the slope
+# slop gives the value of K/V 
+# multiplied this by the treatment time to get the Kt/V
+# This still requires calculation of Dialysance using patient anthrophometric data and the flow rate at the instance of measurement
+
+# using this model the basic understanding of UKM is possible 
