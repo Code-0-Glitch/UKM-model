@@ -1,0 +1,40 @@
+import numpy as np;
+import pandas as pd;
+import matplotlib.pyplot as plt
+
+
+
+Starting_Conc = input("ENTER STARTING BUN MEASUREMENT: ")
+Starting_Conc = float(Starting_Conc)
+# print(f"starting BUN measure: ", Starting_Conc)
+Target_Conc = 15.0
+Dialysis_time = int(input("ENTER DIALYSIS TIME (HOURS): "))
+Sampling_time = float(Dialysis_time) * 60;
+
+time_interval = [];
+for i in range(0, int(Sampling_time), 5):
+    time_interval.append(i)
+Decay = 1
+Target_DATA = False;
+print(Decay)
+BUN_at_time_t = []
+CONC_T = 0.0;
+iteration = 0;
+while (Target_DATA == False):
+    if (CONC_T == 0.0):
+        CONC_T = Starting_Conc
+        BUN_at_time_t.append(CONC_T)
+    for i in range(0, int(Sampling_time), 1):
+        CONC_T = CONC_T * np.exp(Decay)
+        BUN_at_time_t.append(CONC_T)
+    iteration += 1         
+    if(BUN_at_time_t[-1] > (Target_Conc-1) and BUN_at_time_t[-1] < (Target_Conc+1)):
+        Target_DATA = True;
+        print("******************* TARGET_REACHED: TERMINATING ITERATIONS *******************")
+        break;
+    elif (BUN_at_time_t[-1] > Target_Conc):
+        print(f"Iteration No. {iteration}, BUN at {Sampling_time} min: {BUN_at_time_t[-1]}, Decay: {Decay}")
+        print("*** OUT OF RANGE: REIERATING DECAY EXPONENT ***")
+        Decay -= 0.0001
+        BUN_at_time_t.clear()
+        CONC_T = 0.0;
