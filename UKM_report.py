@@ -92,10 +92,17 @@ Report = Report.rename_axis(index = None, columns="Serial No")
 print(Report)
 print("************************************************************************************************")
 print("************************************************************************************************")
-x= np.array(Sampling_interval);
-y= np.array(conc_at_sampling_T);
-plt.plot(x, y)
-plt.xlabel("Time");
-plt.ylabel("BUN(mg/dL)");
-plt.title("Hemodialysis_Adequacy")
-plt.show()
+GRAPH_CHOICE = "\0";
+GRAPH_CHOICE = input("DO YOU NEED PLOT (YES/NO): ");
+GRAPH_CHOICE = GRAPH_CHOICE.upper;
+if(GRAPH_CHOICE == "YES"):
+    x= np.array(Sampling_interval);
+    y= np.array(conc_at_sampling_T);
+    plt.plot(x, y)
+    plt.xlabel("Time");
+    plt.ylabel("BUN(mg/dL)");
+    plt.title("Hemodialysis_Adequacy")
+    plt.show()
+else:
+    print("***********************  THANK_YOU  ***********************")
+    
